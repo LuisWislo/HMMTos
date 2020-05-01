@@ -36,6 +36,9 @@ def viterbi(pi, a, b, obs):
     return path, delta, phi
 
 obs_map = {'Low':0, 'Mid':1, 'High':2}
+
+# Secuencia observada
+# Esto se sacaria de un .wav, yo cree esta secuencia de prueba
 obs = np.array([0,0,0,2,1,1,1,0,0,2,1,1,0,0])
 
 inv_obs_map = dict((v,k) for k, v in obs_map.items())
@@ -45,24 +48,33 @@ print("Simulated Observations:\n",pd.DataFrame(np.column_stack([obs, obs_seq]),c
 
 states = ['Low', 'Mid', 'High']
 hidden_states = ['A', 'B', 'C', 'D', 'E']
+
+# Probabilidades iniciales
 pi = [0, 0, 0, 0, 1]
+
 state_space = pd.Series(pi, index=hidden_states, name='states')
 a_df = pd.DataFrame(columns=hidden_states, index=hidden_states)
+
+# Matriz de transiciones con las probabilidades
 a_df.loc[hidden_states[0]] = [0.2, 0.8, 0, 0, 0]
 a_df.loc[hidden_states[1]] = [0, 0.5, 0.5, 0, 0]
 a_df.loc[hidden_states[2]] = [0, 0, 0.2, 0.8, 0]
 a_df.loc[hidden_states[3]] = [0.3, 0, 0, 0.3, 0.4]
 a_df.loc[hidden_states[4]] = [0.2, 0, 0, 0, 0.8]
+
 print("\n HMM matrix:\n", a_df)
 a = a_df.values
 
 observable_states = states
 b_df = pd.DataFrame(columns=observable_states, index=hidden_states)
+
+# Matriz de las probabilidades de observacion con relacion a un estado
 b_df.loc[hidden_states[0]] = [0,0.1,0.9]
 b_df.loc[hidden_states[1]] = [0,0.8,0.2]
 b_df.loc[hidden_states[2]] = [0,0.6,0.4]
 b_df.loc[hidden_states[3]] = [1,0,0]
 b_df.loc[hidden_states[4]] = [1,0,0]
+
 print("\n Observable layer  matrix:\n",b_df)
 b = b_df.values
 
