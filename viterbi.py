@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import detectos
 
 def viterbi(pi, a, b, obs):
     
@@ -39,7 +40,7 @@ obs_map = {'Low':0, 'Mid':1, 'High':2}
 
 # Secuencia observada
 # Esto se sacaria de un .wav, yo cree esta secuencia de prueba
-obs = np.array([0,0,0,2,1,1,1,0,0,2,1,1,0,0])
+obs = np.array(detectos.getObservables('cough3.wav'))
 
 inv_obs_map = dict((v,k) for k, v in obs_map.items())
 obs_seq = [inv_obs_map[v] for v in list(obs)]
