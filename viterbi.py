@@ -80,6 +80,11 @@ print("\n Observable layer  matrix:\n",b_df)
 b = b_df.values
 
 path, delta, phi = viterbi(pi, a, b, obs)
-state_map = {0:'Snow', 1:'Rain', 2:'Sunshine'}
-state_path = [state_map[v] for v in path]
-pd.DataFrame().assign(Observation=obs_seq).assign(Best_Path=state_path)
+# state_map = {0:'Snow', 1:'Rain', 2:'Sunshine'}
+# state_path = [state_map[v] for v in path]
+# pd.DataFrame().assign(Observation=obs_seq).assign(Best_Path=state_path)
+
+pathStr = ''
+for i in path:
+    pathStr += hidden_states[i] + ' -> '
+print(pathStr)
