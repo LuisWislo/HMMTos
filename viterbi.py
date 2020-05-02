@@ -17,22 +17,23 @@ def viterbi(pi, a, b, obs):
     # init delta and phi 
     delta[:, 0] = pi * b[:, obs[0]]
     phi[:, 0] = 0
-
-    print('\nStart Walk Forward\n')    
+    
+    #print('\nStart Walk Forward\n')    
     # the forward algorithm extension
     for t in range(1, T):
         for s in range(nStates):
             delta[s, t] = np.max(delta[:, t-1] * a[:, s]) * b[s, obs[t]] 
             phi[s, t] = np.argmax(delta[:, t-1] * a[:, s])
-            print('s={s} and t={t}: phi[{s}, {t}] = {phi}'.format(s=s, t=t, phi=phi[s, t]))
+            #print('s={s} and t={t}: phi[{s}, {t}] = {phi}'.format(s=s, t=t, phi=phi[s, t]))
     
     # find optimal path
-    print('-'*50)
-    print('Start Backtrace\n')
+    #print('-'*50)
+    #print('Start Backtrace\n')
     path[T-1] = np.argmax(delta[:, T-1])
     for t in range(T-2, -1, -1):
         path[t] = phi[path[t+1], [t+1]]
-        print('path[{}] = {}'.format(t, path[t]))
+        #print('path[{}] = {}'.format(t, path[t]))
+    
         
     return path, delta, phi
 
@@ -45,7 +46,8 @@ obs = np.array(detectos.getObservables('cough3.wav'))
 inv_obs_map = dict((v,k) for k, v in obs_map.items())
 obs_seq = [inv_obs_map[v] for v in list(obs)]
 
-print("Simulated Observations:\n",pd.DataFrame(np.column_stack([obs, obs_seq]),columns=['Obs_code', 'Obs_seq']) )
+#print("Simulated Observations:\n",pd.DataFrame(np.column_stack([obs, obs_seq]),columns=['Obs_code', 'Obs_seq']) )
+
 
 states = ['Low', 'Mid', 'High']
 hidden_states = ['A', 'B', 'C', 'D', 'E']
@@ -87,4 +89,4 @@ path, delta, phi = viterbi(pi, a, b, obs)
 pathStr = ''
 for i in path:
     pathStr += hidden_states[i] + ' -> '
-print(pathStr)
+print("\n",pathStr)
