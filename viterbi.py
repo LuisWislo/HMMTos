@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import detectos
 
+file = 'cough.wav'
+
 def viterbi(pi, a, b, obs):
     
     nStates = np.shape(b)[0]
@@ -41,7 +43,7 @@ obs_map = {'Low':0, 'Mid':1, 'High':2}
 
 # Secuencia observada
 # Esto se sacaria de un .wav, yo cree esta secuencia de prueba
-obs = np.array(detectos.getObservables('cough3.wav'))
+obs = np.array(detectos.getObservables(file))
 
 inv_obs_map = dict((v,k) for k, v in obs_map.items())
 obs_seq = [inv_obs_map[v] for v in list(obs)]
@@ -59,11 +61,11 @@ state_space = pd.Series(pi, index=hidden_states, name='states')
 a_df = pd.DataFrame(columns=hidden_states, index=hidden_states)
 
 # Matriz de transiciones con las probabilidades
-a_df.loc[hidden_states[0]] = [0.2, 0.8, 0, 0, 0]
-a_df.loc[hidden_states[1]] = [0, 0.5, 0.5, 0, 0]
-a_df.loc[hidden_states[2]] = [0, 0, 0.2, 0.8, 0]
+a_df.loc[hidden_states[0]] = [0.1, 0.65, 0, 0.25, 0]
+a_df.loc[hidden_states[1]] = [0, 0.4, 0.15, 0.3, 0.15]
+a_df.loc[hidden_states[2]] = [0, 0.5, 0.3, 0.2, 0]
 a_df.loc[hidden_states[3]] = [0.3, 0, 0, 0.3, 0.4]
-a_df.loc[hidden_states[4]] = [0.2, 0, 0, 0, 0.8]
+a_df.loc[hidden_states[4]] = [0.35, 0, 0, 0, 0.65]
 
 print("\n HMM matrix:\n", a_df)
 a = a_df.values
@@ -74,7 +76,7 @@ b_df = pd.DataFrame(columns=observable_states, index=hidden_states)
 # Matriz de las probabilidades de observacion con relacion a un estado
 b_df.loc[hidden_states[0]] = [0,0.1,0.9]
 b_df.loc[hidden_states[1]] = [0,0.8,0.2]
-b_df.loc[hidden_states[2]] = [0,0.6,0.4]
+b_df.loc[hidden_states[2]] = [0,0.4,0.6]
 b_df.loc[hidden_states[3]] = [1,0,0]
 b_df.loc[hidden_states[4]] = [1,0,0]
 
